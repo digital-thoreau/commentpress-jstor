@@ -261,6 +261,67 @@ jQuery(document).ready( function($) {
 
 			});
 
+			/**
+			 * Rolling onto the JSTOR article snippet.
+			 *
+			 * @param {Object} event The rolled-over object
+			 * @return void
+			 */
+			$('#comments_sidebar').on( 'mouseenter', '.commentpress_jstor_comments .comment-content', function( event ) {
+
+				// define vars
+				var element = $(this),
+					match_text, para_text,
+					text_sig, textblock_id, item,
+					start, end;
+
+				// get matched text wrapped in <em> tag
+				match_text = element.find( 'em' ).html();
+
+				// find this in the paragraph's text sig
+				text_sig = element.parents( '.commentpress_jstor_comments' ).attr( 'data-jstor-textsig' );
+
+				textblock_id = 'textblock-' + text_sig
+
+				// target para
+				para_text = $('#' + textblock_id).text();
+
+				// get start
+				start = para_text.indexOf( match_text );
+
+				// bail if we can't find the text
+				if ( start === -1 ) {
+					if ( console && console.log ) {
+						console.log( 'Could not find text:', match_text );
+					}
+					return;
+				}
+
+				// find end
+				end = start + match_text.length;
+
+				// construct item
+				item = { start: start, end: end };
+
+				// highlight the match using CommentPress.texthighlighter
+				CommentPress.texthighlighter.utilities.selection_restore( document.getElementById( textblock_id ), item );
+				$('#' + textblock_id).wrapSelection({fitToWord: false}).addClass( 'inline-highlight-per-comment' );
+
+			});
+
+			/**
+			 * Rolling off the JSTOR article snippet.
+			 *
+			 * @param {Object} event The rolled-off object
+			 * @return void
+			 */
+			$('#comments_sidebar').on( 'mouseleave', '.commentpress_jstor_comments .comment-content', function( event ) {
+
+				// clear all highlights
+				CommentPress.texthighlighter.textblocks.highlights_clear_for_comment();
+
+			});
+
 		};
 
 		/**
@@ -307,7 +368,7 @@ jQuery(document).ready( function($) {
 			// callback on success
 			request.done( function( data ) {
 
-				var docs, i, doc, stable_url, comment_html, m, match, page_link, item;
+				var docs, i, doc, stable_url, comment_html, m, match, page_link, item, text_sig_data;
 
 				// aggregate
 				docs = me.aggregate_data( data );
@@ -371,8 +432,11 @@ jQuery(document).ready( function($) {
 				// hide the spinner
 				$('#jstor-loading').remove();
 
+				// add text signature for access during rollovers
+				text_sig_data = ' data-jstor-textsig="' + text_sig + '"';
+
 				// convert markup to jQuery object
-				item = $('<div class="commentpress_jstor_comments">').html( comment_html );
+				item = $('<div class="commentpress_jstor_comments"' + text_sig_data + '>').html( comment_html );
 
 				// append to trigger
 				item.appendTo( element.parent() )
