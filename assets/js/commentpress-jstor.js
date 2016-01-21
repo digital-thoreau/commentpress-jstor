@@ -309,12 +309,8 @@ jQuery(document).ready( function($) {
 
 				var docs, i, doc, stable_url, comment_html, m, match, page_link, item;
 
-				// trace
-				console.log( 'data returned', data );
-
 				// aggregate
 				docs = me.aggregate_data( data );
-				console.log( 'aggregated data', docs );
 
 				// init markup
 				comment_html = '<ol>';
@@ -356,7 +352,7 @@ jQuery(document).ready( function($) {
 
 						// comment content
 						comment_html += '<div class="comment-content">';
-						comment_html += match.snippet.text;
+						comment_html += '&hellip;' + match.snippet.text + '&hellip;';
 						comment_html += '</div><!-- /comment-content -->';
 
 					}
@@ -376,10 +372,14 @@ jQuery(document).ready( function($) {
 				$('#jstor-loading').remove();
 
 				// convert markup to jQuery object
-				item = $('<div>').html( comment_html );
+				item = $('<div class="commentpress_jstor_comments">').html( comment_html );
 
 				// append to trigger
-				item.appendTo( element.parent() ); //.hide();
+				item.appendTo( element.parent() )
+					.hide()
+					.slideDown( 'fast', function() {
+						// after slide
+					});
 
 			});
 
