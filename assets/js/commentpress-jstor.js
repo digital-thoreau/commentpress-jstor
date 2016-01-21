@@ -85,12 +85,8 @@ jQuery(document).ready( function($) {
 		 * @return void
 		 */
 		this.init_spinner = function() {
-			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings ) {
-				if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data ) {
-					if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data.spinner ) {
-						me.spinner = CommentPress_JSTOR_Settings.data.spinner;
-					}
-				}
+			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data.spinner ) {
+				me.spinner = CommentPress_JSTOR_Settings.data.spinner;
 			}
 		};
 
@@ -124,12 +120,8 @@ jQuery(document).ready( function($) {
 		 * @return void
 		 */
 		this.init_token = function() {
-			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings ) {
-				if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data ) {
-					if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data.token ) {
-						me.token = CommentPress_JSTOR_Settings.data.token;
-					}
-				}
+			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data.token ) {
+				me.token = CommentPress_JSTOR_Settings.data.token;
 			}
 		};
 
@@ -164,12 +156,8 @@ jQuery(document).ready( function($) {
 		 * @return void
 		 */
 		this.init_fields = function() {
-			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings ) {
-				if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data ) {
-					if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data.fields ) {
-						me.fields = CommentPress_JSTOR_Settings.data.fields;
-					}
-				}
+			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data.fields ) {
+				me.fields = CommentPress_JSTOR_Settings.data.fields;
 			}
 		};
 
