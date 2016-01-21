@@ -212,6 +212,9 @@ class Commentpress_JSTOR {
 	 */
 	public function paragraph_wrapper( $text_sig ) {
 
+		// bail if whole page
+		if ( empty( $text_sig ) ) return;
+
 		// build markup
 		$markup = '<div class="commentpress_jstor">';
 		$markup .= '<p class="commentpress_jstor_trigger" data-jstor-textsig="' . $text_sig . '">' .
