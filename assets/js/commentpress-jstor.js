@@ -270,80 +270,10 @@ jQuery(document).ready( function($) {
 			$('#comments_sidebar').on( 'mouseenter', '.commentpress_jstor_comments .comment-content', function( event ) {
 
 				// define vars
-				var element = $(this),
-					match_text, para_text,
-					text_sig, textblock_id, item,
-					start, end;
+				var element = $(this);
 
-				// get matched text wrapped in <em> tag
-				match_text = element.find( 'em' ).html();
-
-				// find this in the paragraph's text sig
-				text_sig = element.parents( '.commentpress_jstor_comments' ).attr( 'data-jstor-textsig' );
-
-				textblock_id = 'textblock-' + text_sig
-
-				// target para
-				para_text = $('#' + textblock_id).text();
-
-				// get start
-				start = para_text.indexOf( match_text );
-
-				// if we can't find the text
-				if ( start === -1 ) {
-
-					// trace
-					if ( console && console.log ) {
-						console.log( 'Could not find text:', match_text );
-					}
-
-					// try removing the last character, which is often punctuation
-					match_text = match_text.substr( 0, match_text.length - 1 );
-
-					// get start
-					start = para_text.indexOf( match_text );
-
-					// if we can't find the text
-					if ( start === -1 ) {
-
-						// trace
-						if ( console && console.log ) {
-							console.log( 'Could not find shortened text:', match_text );
-						}
-
-						// try removing fancy quotes from para text and match text
-						para_text = para_text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
-						match_text = match_text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
-
-						// get start
-						start = para_text.indexOf( match_text );
-
-						// if we can't find the text
-						if ( start === -1 ) {
-
-							// trace
-							if ( console && console.log ) {
-								console.log( 'Could not find un-smartened text:', match_text );
-							}
-
-							// if all of this fails, bail
-							return;
-
-						}
-
-					}
-
-				}
-
-				// find end
-				end = start + match_text.length;
-
-				// construct item
-				item = { start: start, end: end };
-
-				// highlight the match using CommentPress.texthighlighter
-				CommentPress.texthighlighter.utilities.selection_restore( document.getElementById( textblock_id ), item );
-				$('#' + textblock_id).wrapSelection({fitToWord: false}).addClass( 'inline-highlight-per-comment' );
+				// call highlight method for this element
+				me.highlight_text( element );
 
 			});
 
@@ -356,9 +286,106 @@ jQuery(document).ready( function($) {
 			$('#comments_sidebar').on( 'mouseleave', '.commentpress_jstor_comments .comment-content', function( event ) {
 
 				// clear all highlights
-				CommentPress.texthighlighter.textblocks.highlights_clear_for_comment();
+				me.unhighlight_text();
 
 			});
+
+		};
+
+		/**
+		 * Highlight the matched text in the body of the page.
+		 *
+		 * @param {Object} element The element containing the matched text
+		 * @return void
+		 */
+		this.highlight_text = function( element ) {
+
+			// define vars
+			var match_text, para_text,
+				text_sig, textblock_id,
+				item, start, end;
+
+			// get matched text wrapped in <em> tag
+			match_text = element.find( 'em' ).html();
+
+			// find this in the paragraph's text sig
+			text_sig = element.parents( '.commentpress_jstor_comments' ).attr( 'data-jstor-textsig' );
+
+			textblock_id = 'textblock-' + text_sig
+
+			// target para
+			para_text = $('#' + textblock_id).text();
+
+			// get start
+			start = para_text.indexOf( match_text );
+
+			// if we can't find the text
+			if ( start === -1 ) {
+
+				// trace
+				if ( console && console.log ) {
+					console.log( 'Could not find text:', match_text );
+				}
+
+				// try removing the last character, which is often punctuation
+				match_text = match_text.substr( 0, match_text.length - 1 );
+
+				// get start
+				start = para_text.indexOf( match_text );
+
+				// if we can't find the text
+				if ( start === -1 ) {
+
+					// trace
+					if ( console && console.log ) {
+						console.log( 'Could not find shortened text:', match_text );
+					}
+
+					// try removing fancy quotes from para text and match text
+					para_text = para_text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
+					match_text = match_text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
+
+					// get start
+					start = para_text.indexOf( match_text );
+
+					// if we can't find the text
+					if ( start === -1 ) {
+
+						// trace
+						if ( console && console.log ) {
+							console.log( 'Could not find un-smartened text:', match_text );
+						}
+
+						// if all of this fails, bail
+						return;
+
+					}
+
+				}
+
+			}
+
+			// find end
+			end = start + match_text.length;
+
+			// construct item
+			item = { start: start, end: end };
+
+			// highlight the match using CommentPress.texthighlighter
+			CommentPress.texthighlighter.utilities.selection_restore( document.getElementById( textblock_id ), item );
+			$('#' + textblock_id).wrapSelection({fitToWord: false}).addClass( 'inline-highlight-per-comment' );
+
+		};
+
+		/**
+		 * Unhighlight all matched text in the body of the page.
+		 *
+		 * @return void
+		 */
+		this.unhighlight_text = function( element ) {
+
+			// clear all highlights
+			CommentPress.texthighlighter.textblocks.highlights_clear_for_comment();
 
 		};
 
