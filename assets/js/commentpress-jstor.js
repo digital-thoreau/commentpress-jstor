@@ -109,6 +109,41 @@ jQuery(document).ready( function($) {
 			return me.spinner;
 		};
 
+		// default JSTOR work code
+		me.work = 'walden_by_para';
+
+		/**
+		 * Init JSTOR work code from settings object.
+		 *
+		 * By doing this, we can override the default value.
+		 *
+		 * @return void
+		 */
+		this.init_work = function() {
+			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data.work ) {
+				me.work = CommentPress_JSTOR_Settings.data.work;
+			}
+		};
+
+		/**
+		 * Setter for JSTOR work code.
+		 *
+		 * @param {String} val The JSTOR work code
+		 * @return void
+		 */
+		this.set_work = function( val ) {
+			me.work = val;
+		};
+
+		/**
+		 * Getter for JSTOR work code.
+		 *
+		 * @return {String} The JSTOR work code
+		 */
+		this.get_work = function() {
+			return me.work;
+		};
+
 		// default token provided by JSTOR
 		me.token = '417901c2555ba65649f356626aada7f273390cf3';
 
@@ -248,6 +283,7 @@ jQuery(document).ready( function($) {
 				// define vars
 				var element = $(this), text_sig;
 
+				// show spinner
 				$(this).after(
 					'<p class="commentpress_jstor_spinner" id="jstor-loading">' +
 					'<img src="' + CommentPressJSTOR.settings.get_spinner() + '" alt="' + '" />' +
@@ -418,7 +454,7 @@ jQuery(document).ready( function($) {
 
 				// data
 				data: {
-					work: 'walden_by_para',
+					work: CommentPressJSTOR.settings.get_work(),
 					chunk_ids: 'textblock-' + text_sig,
 					similarity: '[0.9 TO *]',
 					match_size: '[20 TO *]',
