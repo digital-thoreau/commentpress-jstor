@@ -311,8 +311,9 @@ jQuery(document).ready( function($) {
 							console.log( 'Could not find shortened text:', match_text );
 						}
 
-						// try removing fancy quotes from para text
-						para_text = para_text.replace(/[\u2018\u2019]/g, "'");
+						// try removing fancy quotes from para text and match text
+						para_text = para_text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
+						match_text = match_text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
 
 						// get start
 						start = para_text.indexOf( match_text );
@@ -322,7 +323,7 @@ jQuery(document).ready( function($) {
 
 							// trace
 							if ( console && console.log ) {
-								console.log( 'Could not find smartened text:', match_text );
+								console.log( 'Could not find un-smartened text:', match_text );
 							}
 
 							// if all of this fails, bail
