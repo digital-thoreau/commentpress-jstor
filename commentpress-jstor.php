@@ -153,6 +153,9 @@ class Commentpress_JSTOR {
 	 */
 	public function enqueue_styles() {
 
+		// restrict to admins for now
+		if ( ! is_super_admin() ) return;
+
 		// enqueue our front-end CSS
 		wp_enqueue_style(
 			'commentpress_jstor_custom_css',
@@ -174,6 +177,9 @@ class Commentpress_JSTOR {
 	 * @return void
 	 */
 	public function enqueue_scripts() {
+
+		// restrict to admins for now
+		if ( ! is_super_admin() ) return;
 
 		// enqueue our custom Javascript
 		wp_enqueue_script(
@@ -211,6 +217,9 @@ class Commentpress_JSTOR {
 	 * @return void
 	 */
 	public function paragraph_wrapper( $text_sig ) {
+
+		// restrict to admins for now
+		if ( ! is_super_admin() ) return;
 
 		// bail if whole page
 		if ( empty( $text_sig ) ) return;
