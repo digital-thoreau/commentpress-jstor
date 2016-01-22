@@ -245,19 +245,20 @@ jQuery(document).ready( function($) {
 			 */
 			$('#comments_sidebar').on( 'click', '.commentpress_jstor p', function( event ) {
 
+				// define vars
 				var element = $(this), text_sig;
-
-				// get text signature
-				text_sig = element.attr( 'data-jstor-textsig' );
-
-				// retrieve JSTOR data
-				me.get_data( element, text_sig );
 
 				$(this).after(
 					'<p class="commentpress_jstor_spinner" id="jstor-loading">' +
 					'<img src="' + CommentPressJSTOR.settings.get_spinner() + '" alt="' + '" />' +
 					'</p>'
 				);
+
+				// get text signature
+				text_sig = element.attr( 'data-jstor-textsig' );
+
+				// retrieve JSTOR data
+				me.get_data( element, text_sig );
 
 			});
 
