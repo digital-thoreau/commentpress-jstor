@@ -289,12 +289,49 @@ jQuery(document).ready( function($) {
 				// get start
 				start = para_text.indexOf( match_text );
 
-				// bail if we can't find the text
+				// if we can't find the text
 				if ( start === -1 ) {
+
+					// trace
 					if ( console && console.log ) {
 						console.log( 'Could not find text:', match_text );
 					}
-					return;
+
+					// try removing the last character, which is often punctuation
+					match_text = match_text.substr( 0, match_text.length - 1 );
+
+					// get start
+					start = para_text.indexOf( match_text );
+
+					// if we can't find the text
+					if ( start === -1 ) {
+
+						// trace
+						if ( console && console.log ) {
+							console.log( 'Could not find shortened text:', match_text );
+						}
+
+						// try removing fancy quotes from para text
+						para_text = para_text.replace(/[\u2018\u2019]/g, "'");
+
+						// get start
+						start = para_text.indexOf( match_text );
+
+						// if we can't find the text
+						if ( start === -1 ) {
+
+							// trace
+							if ( console && console.log ) {
+								console.log( 'Could not find smartened text:', match_text );
+							}
+
+							// if all of this fails, bail
+							return;
+
+						}
+
+					}
+
 				}
 
 				// find end
