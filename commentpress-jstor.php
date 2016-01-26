@@ -43,6 +43,28 @@ class Commentpress_JSTOR {
 
 
 	/**
+	 * Admin object.
+	 *
+	 * @since 0.1
+	 * @access public
+	 * @var object $admin The admin object
+	 */
+	public $admin;
+
+
+
+	/**
+	 * Display object.
+	 *
+	 * @since 0.1
+	 * @access public
+	 * @var object $admin The display object
+	 */
+	public $display;
+
+
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 0.1
@@ -50,6 +72,12 @@ class Commentpress_JSTOR {
 	 * @return object $this
 	 */
 	public function __construct() {
+
+		// include files
+		$this->include_files();
+
+		// setup globals
+		$this->setup_globals();
 
 		// register hooks
 		$this->register_hooks();
@@ -88,6 +116,44 @@ class Commentpress_JSTOR {
 
 
 	/**
+	 * Include files.
+	 *
+	 * @since 0.1
+	 *
+	 * @return void
+	 */
+	public function include_files() {
+
+		// include admin class
+		include_once COMMENTPRESS_JSTOR_PATH . 'includes/commentpress-jstor-admin.php';
+
+		// include display class
+		include_once COMMENTPRESS_JSTOR_PATH . 'includes/commentpress-jstor-display.php';
+
+	}
+
+
+
+	/**
+	 * Set up objects.
+	 *
+	 * @since 0.1
+	 *
+	 * @return void
+	 */
+	public function setup_globals() {
+
+		// init admin object
+		$this->admin = new Commentpress_JSTOR_Admin( $this );
+
+		// init display object
+		$this->display = new Commentpress_JSTOR_Display( $this );
+
+	}
+
+
+
+	/**
 	 * Register WordPress hooks.
 	 *
 	 * @since 0.1
@@ -99,21 +165,16 @@ class Commentpress_JSTOR {
 		// use translation
 		add_action( 'plugins_loaded', array( $this, 'translation' ) );
 
-		// include styles
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 20 );
-
-		// include scripts
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
-
-		// add markup to CommentPress
-		add_action( 'commentpress_after_paragraph_wrapper', array( $this, 'paragraph_wrapper' ), 10, 1 );
+		// hooks that always need to be present
+		$this->admin->register_hooks();
+		$this->display->register_hooks();
 
 	}
 
 
 
 	/**
-	 * Load translation if present
+	 * Load translation if present.
 	 *
 	 * @since 0.1
 	 *
@@ -139,100 +200,6 @@ class Commentpress_JSTOR {
 			);
 
 		}
-
-	}
-
-
-
-	/**
-	 * Enqueue any styles needed by our public pages.
-	 *
-	 * @since 0.1
-	 *
-	 * @return void
-	 */
-	public function enqueue_styles() {
-
-		// restrict to admins for now
-		if ( ! is_super_admin() ) return;
-
-		// enqueue our front-end CSS
-		wp_enqueue_style(
-			'commentpress_jstor_custom_css',
-			COMMENTPRESS_JSTOR_URL . 'assets/css/commentpress-jstor.css',
-			null,
-			COMMENTPRESS_JSTOR_VERSION,
-			'all' // media
-		);
-
-	}
-
-
-
-	/**
-	 * Enqueue any scripts needed by our public pages.
-	 *
-	 * @since 0.1
-	 *
-	 * @return void
-	 */
-	public function enqueue_scripts() {
-
-		// restrict to admins for now
-		if ( ! is_super_admin() ) return;
-
-		// enqueue our custom Javascript
-		wp_enqueue_script(
-			'commentpress_jstor_custom_js',
-			COMMENTPRESS_JSTOR_URL . 'assets/js/commentpress-jstor.js',
-			array( 'jquery' ),
-			COMMENTPRESS_JSTOR_VERSION
-		);
-
-		// localisation array
-		$vars = array(
-			'localisation' => array(),
-			'data' => array(
-				'spinner' => plugins_url( 'assets/images/loading.gif', COMMENTPRESS_JSTOR_FILE ),
-			),
-		);
-
-		// localise via WordPress
-		wp_localize_script(
-			'commentpress_jstor_custom_js',
-			'CommentPress_JSTOR_Settings',
-			$vars
-		);
-
-	}
-
-
-
-	/**
-	 * Add markup to CommentPress paragraph wrappers.
-	 *
-	 * @since 0.1
-	 *
-	 * @param str $text_sig The text signature of the paragraph
-	 * @return void
-	 */
-	public function paragraph_wrapper( $text_sig ) {
-
-		// restrict to admins for now
-		if ( ! is_super_admin() ) return;
-
-		// bail if whole page
-		if ( empty( $text_sig ) ) return;
-
-		// build markup
-		$markup = '<div class="commentpress_jstor">';
-		$markup .= '<p class="commentpress_jstor_trigger" data-jstor-textsig="' . $text_sig . '">' .
-						__( 'Find references in JSTOR articles', 'commentpress-jstor' ) .
-					'</p>';
-		$markup .= '</div>';
-
-		// show it
-		echo $markup;
 
 	}
 

@@ -44,11 +44,25 @@ jQuery(document).ready( function($) {
 			// init spinner
 			me.init_spinner();
 
+			// init JSTOR work code
+			me.init_work();
+
 			// init JSTOR token
 			me.init_token();
 
 			// init JSTOR fields
 			me.init_fields();
+
+		};
+
+		/**
+		 * Do setup when jQuery reports that the DOM is ready.
+		 *
+		 * This method should only be called once.
+		 *
+		 * @return void
+		 */
+		this.dom_ready = function() {
 
 		};
 
@@ -85,8 +99,8 @@ jQuery(document).ready( function($) {
 		 * @return void
 		 */
 		this.init_spinner = function() {
-			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data.spinner ) {
-				me.spinner = CommentPress_JSTOR_Settings.data.spinner;
+			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.interface.spinner ) {
+				me.spinner = CommentPress_JSTOR_Settings.interface.spinner;
 			}
 		};
 
@@ -109,8 +123,8 @@ jQuery(document).ready( function($) {
 			return me.spinner;
 		};
 
-		// default JSTOR work code
-		me.work = 'walden_by_para';
+		// init JSTOR work code
+		me.work = '';
 
 		/**
 		 * Init JSTOR work code from settings object.
@@ -120,8 +134,8 @@ jQuery(document).ready( function($) {
 		 * @return void
 		 */
 		this.init_work = function() {
-			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data.work ) {
-				me.work = CommentPress_JSTOR_Settings.data.work;
+			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.jstor.work ) {
+				me.work = CommentPress_JSTOR_Settings.jstor.work;
 			}
 		};
 
@@ -144,8 +158,8 @@ jQuery(document).ready( function($) {
 			return me.work;
 		};
 
-		// default token provided by JSTOR
-		me.token = '417901c2555ba65649f356626aada7f273390cf3';
+		// init token
+		me.token = '';
 
 		/**
 		 * Init JSTOR token from settings object.
@@ -155,8 +169,8 @@ jQuery(document).ready( function($) {
 		 * @return void
 		 */
 		this.init_token = function() {
-			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data.token ) {
-				me.token = CommentPress_JSTOR_Settings.data.token;
+			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.jstor.token ) {
+				me.token = CommentPress_JSTOR_Settings.jstor.token;
 			}
 		};
 
@@ -179,9 +193,8 @@ jQuery(document).ready( function($) {
 			return me.token;
 		};
 
-		// default fields provided by JSTOR
-		me.fields = 'docid,work,work_text,chunk_ids,title,journal,authors,pages,' +
-					'pubyear,keyterms,similarity,match_size,snippet,source';
+		// init fields
+		me.fields = '';
 
 		/**
 		 * Init JSTOR fields from settings object.
@@ -191,8 +204,8 @@ jQuery(document).ready( function($) {
 		 * @return void
 		 */
 		this.init_fields = function() {
-			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.data.fields ) {
-				me.fields = CommentPress_JSTOR_Settings.data.fields;
+			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.jstor.fields ) {
+				me.fields = CommentPress_JSTOR_Settings.jstor.fields;
 			}
 		};
 
@@ -258,19 +271,6 @@ jQuery(document).ready( function($) {
 		 * @return void
 		 */
 		this.listeners = function() {
-
-			/**
-			 * Hook into the CommentPress theme "document ready" trigger
-			 *
-			 * @param {Object} event The clicked object
-			 * @return void
-			 */
-			$(document).on( 'commentpress-document-ready', function( event ) {
-
-				// enable this plugin
-				CommentPressJSTOR.settings.set_enabled( true );
-
-			});
 
 			/**
 			 * Clicks on "Find references in JSTOR articles" text
@@ -472,6 +472,27 @@ jQuery(document).ready( function($) {
 
 				var docs, i, doc, stable_url, comment_html, m, match, page_link, item, text_sig_data;
 
+				// did we get any?
+				if ( data.count == 0 ) {
+
+					// hide the spinner
+					$('#jstor-loading').remove();
+
+					// costruct markup
+					comment_html = '<p>' + CommentPress_JSTOR_Settings.localisation.not_found + '</p>';;
+
+					// convert markup to jQuery object
+					item = $('<div class="commentpress_jstor_comments">').html( comment_html );
+
+					// append to trigger
+					item.appendTo( element.parent() )
+						.hide()
+						.slideDown( 'fast', function() {
+							// after slide
+						});
+
+				}
+
 				// aggregate
 				docs = me.aggregate_data( data );
 
@@ -551,6 +572,10 @@ jQuery(document).ready( function($) {
 
 			// callback on failure
 			request.fail( function( jqXHR, textStatus ) {
+
+				// hide the spinner
+				$('#jstor-loading').remove();
+
 				if ( console && console.log ) {
 					console.log( 'request failed: ' + textStatus );
 				}
@@ -642,6 +667,9 @@ jQuery(document).ready( function($) {
  * @return void
  */
 jQuery(document).ready(function($) {
+
+	// The DOM is loaded now
+	CommentPressJSTOR.settings.dom_ready();
 
 	// The DOM is loaded now
 	CommentPressJSTOR.API.dom_ready();
