@@ -273,6 +273,19 @@ jQuery(document).ready( function($) {
 		this.listeners = function() {
 
 			/**
+			 * Hook into the CommentPress theme "document ready" trigger
+			 *
+			 * @param {Object} event The clicked object
+			 * @return void
+			 */
+			$(document).on( 'commentpress-document-ready', function( event ) {
+
+				// enable this plugin
+				CommentPressJSTOR.settings.set_enabled( true );
+
+			});
+
+			/**
 			 * Clicks on "Find references in JSTOR articles" text
 			 *
 			 * @param {Object} event The clicked object
@@ -479,7 +492,7 @@ jQuery(document).ready( function($) {
 					$('#jstor-loading').remove();
 
 					// costruct markup
-					comment_html = '<p>' + CommentPress_JSTOR_Settings.localisation.not_found + '</p>';;
+					comment_html = '<p class="comment-not-found">' + CommentPress_JSTOR_Settings.localisation.not_found + '</p>';
 
 					// convert markup to jQuery object
 					item = $('<div class="commentpress_jstor_comments">').html( comment_html );
@@ -489,7 +502,13 @@ jQuery(document).ready( function($) {
 						.hide()
 						.slideDown( 'fast', function() {
 							// after slide
+							setTimeout(function () {
+								item.slideUp( ' fast' );
+							}, 2000 );
 						});
+
+					// bail!
+					return;
 
 				}
 
