@@ -377,8 +377,9 @@ jQuery(document).ready( function($) {
 					console.log( 'Could not find text:', match_text );
 				}
 
-				// try removing the last character, which is often punctuation
-				match_text = match_text.substr( 0, match_text.length - 1 );
+				// try removing fancy quotes from para text and match text
+				para_text = para_text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
+				match_text = match_text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
 
 				// get start
 				start = para_text.indexOf( match_text );
@@ -388,12 +389,12 @@ jQuery(document).ready( function($) {
 
 					// trace
 					if ( console && console.log ) {
-						console.log( 'Could not find shortened text:', match_text );
+						console.log( 'Could not find un-smartened text:', match_text );
 					}
 
-					// try removing fancy quotes from para text and match text
-					para_text = para_text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
-					match_text = match_text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
+					// try making para text and match text lowercase
+					para_text = para_text.toLowerCase();
+					match_text = match_text.toLowerCase();
 
 					// get start
 					start = para_text.indexOf( match_text );
@@ -403,11 +404,45 @@ jQuery(document).ready( function($) {
 
 						// trace
 						if ( console && console.log ) {
-							console.log( 'Could not find un-smartened text:', match_text );
+							console.log( 'Could not find lowercase text:', match_text );
 						}
 
-						// if all of this fails, bail
-						return;
+
+						// try replacing various words in para text and match text
+						para_text = para_text.replace(/traveling/g, "travelling");
+						match_text = match_text.replace(/traveling/g, "travelling");
+
+						// get start
+						start = para_text.indexOf( match_text );
+
+						// if we can't find the text
+						if ( start === -1 ) {
+
+							// trace
+							if ( console && console.log ) {
+								console.log( 'Could not find word-replaced text:', match_text );
+							}
+
+							// try removing the last character, which is often punctuation
+							match_text = match_text.substr( 0, match_text.length - 1 );
+
+							// get start
+							start = para_text.indexOf( match_text );
+
+							// if we can't find the text
+							if ( start === -1 ) {
+
+								// trace
+								if ( console && console.log ) {
+									console.log( 'Could not find shortened text:', match_text );
+								}
+
+								// if all of this fails, bail
+								return;
+
+							}
+
+						}
 
 					}
 
