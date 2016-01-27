@@ -122,20 +122,23 @@ class Commentpress_JSTOR_Admin {
 
 		// init work
 		$work = '';
-		if ( ! empty( $this->setting_get( 'work' ) ) ) {
-			$work = $this->setting_get( 'work' );
+		$existing_work = $this->setting_get( 'work' );
+		if ( ! empty( $existing_work ) ) {
+			$work = $existing_work;
 		}
 
 		// init token
 		$token = '';
-		if ( ! empty( $this->setting_get( 'token' ) ) ) {
-			$token = $this->setting_get( 'token' );
+		$existing_token = $this->setting_get( 'token' );
+		if ( ! empty( $existing_token ) ) {
+			$token = $existing_token;
 		}
 
 		// init fields
 		$fields = '';
-		if ( ! empty( $this->setting_get( 'fields' ) ) ) {
-			$fields = $this->setting_get( 'fields' );
+		$existing_fields = $this->setting_get( 'fields' );
+		if ( ! empty( $existing_fields ) ) {
+			$fields = $existing_fields;
 		}
 
 		// append our options
@@ -263,12 +266,13 @@ class Commentpress_JSTOR_Admin {
 		// deny by default
 		$enabled = false;
 
+		// get settings
+		$work = $this->setting_get( 'work' );
+		$token = $this->setting_get( 'token' );
+		$fields = $this->setting_get( 'fields' );
+
 		// check essential settings have values
-		if (
-			! empty( $this->plugin->admin->setting_get( 'work' ) ) AND
-			! empty( $this->plugin->admin->setting_get( 'token' ) ) AND
-			! empty( $this->plugin->admin->setting_get( 'fields' ) )
-		) {
+		if ( ! empty( $work ) AND ! empty( $token ) AND ! empty( $fields ) ) {
 			$enabled = true;
 		}
 
