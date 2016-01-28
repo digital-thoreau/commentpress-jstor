@@ -37,7 +37,6 @@ class Commentpress_JSTOR_Admin {
 	 * @since 0.1
 	 *
 	 * @param object $parent The global plugin object
-	 * @return object $this
 	 */
 	public function __construct( $parent ) {
 
@@ -46,9 +45,6 @@ class Commentpress_JSTOR_Admin {
 
 		// load settings array
 		$this->settings = get_option( 'commentpress_jstor_settings', $this->settings );
-
-		// --<
-		return $this;
 
 	}
 

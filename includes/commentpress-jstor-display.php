@@ -26,15 +26,11 @@ class Commentpress_JSTOR_Display {
 	 * @since 0.1
 	 *
 	 * @param object $parent The global plugin object
-	 * @return object $this
 	 */
 	public function __construct( $parent ) {
 
 		// store reference
 		$this->plugin = $parent;
-
-		// --<
-		return $this;
 
 	}
 

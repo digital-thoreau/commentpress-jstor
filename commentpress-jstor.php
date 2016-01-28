@@ -68,8 +68,6 @@ class Commentpress_JSTOR {
 	 * Constructor.
 	 *
 	 * @since 0.1
-	 *
-	 * @return object $this
 	 */
 	public function __construct() {
 
@@ -81,9 +79,6 @@ class Commentpress_JSTOR {
 
 		// register hooks
 		$this->register_hooks();
-
-		// --<
-		return $this;
 
 	}
 
