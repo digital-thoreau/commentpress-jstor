@@ -139,7 +139,7 @@ class Commentpress_JSTOR_Display {
 		$vars = array(
 			'localisation' => array(
 				'not_found' => __( 'No references were found on JSTOR.', 'commentpress-jstor' ),
-				'snippet_link' => __( 'View on JSTOR.', 'commentpress-jstor' ),
+				'snippet_link' => __( 'View on JSTOR', 'commentpress-jstor' ),
 			),
 			'interface' => array(
 				'spinner' => plugins_url( 'assets/images/loading.gif', COMMENTPRESS_JSTOR_FILE ),
