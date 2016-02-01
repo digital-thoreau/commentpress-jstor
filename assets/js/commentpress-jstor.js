@@ -586,12 +586,17 @@ jQuery(document).ready( function($) {
 						match = doc.matches[m];
 
 						// more granular link
-						page_link = stable_url + '?seq=' + match.snippet.page + '&labs=matchmaker';
+						page_link = stable_url + '?seq=' + match.snippet.page + '&amp;labs=matchmaker';
 
 						// comment content
 						comment_html += '<div class="comment-content">';
-						comment_html += '&hellip;' + match.snippet.text + '&hellip;';
+						comment_html += '&hellip;' + match.snippet.text.replace( /"/g, '&quot;' ) + '&hellip;';
 						comment_html += '</div><!-- /comment-content -->';
+						
+						// comment JSTOR link
+						comment_html += '<div class="reply">';
+						comment_html += '<a href="' + page_link + '">' + CommentPress_JSTOR_Settings.localisation.snippet_link + '</a>';
+						comment_html += '</div>';
 
 					}
 
@@ -646,7 +651,7 @@ jQuery(document).ready( function($) {
 		this.aggregate_data = function( raw_data ) {
 
 			// declare vars
-			var byDocid = {}, match, aggregated = [], docid;
+			var by_docid = {}, match, aggregated = [], docid;
 
 			// loop through docs in raw data
 			for( var i = 0; i < raw_data.docs.length; i++ ) {
@@ -655,10 +660,10 @@ jQuery(document).ready( function($) {
 				match = raw_data.docs[i];
 
 				// have we created the docid key yet?
-				if ( ! ( match.docid in byDocid ) ) {
+				if ( ! ( match.docid in by_docid ) ) {
 
 					// nope - create it
-					byDocid[match.docid] = {
+					by_docid[match.docid] = {
 						docid:    match.docid,
 						journal:  match.journal,
 						title:    match.title,
@@ -671,7 +676,7 @@ jQuery(document).ready( function($) {
 				}
 
 				// add to matches array, keyed by docid
-				byDocid[match.docid]['matches'].push({
+				by_docid[match.docid]['matches'].push({
 					work:       match.work,
 					chunk_ids:  match.chunk_ids,
 					similarity: match.similarity,
@@ -683,14 +688,14 @@ jQuery(document).ready( function($) {
 						similarity: match.similarity,
 						size:       match.match_size,
 						source:     match.source
-					},
+					}
 				});
 
 			}
 
 			// reassemble into aggregated
-			for ( docid in byDocid ) {
-				aggregated.push( byDocid[docid] );
+			for ( docid in by_docid ) {
+				aggregated.push( by_docid[docid] );
 			}
 
 			// sort
