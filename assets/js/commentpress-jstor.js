@@ -373,9 +373,7 @@ jQuery(document).ready( function($) {
 			if ( start === -1 ) {
 
 				// trace
-				if ( console && console.log ) {
-					console.log( 'Could not find text:', match_text );
-				}
+				me.debug( 'Could not find text:', match_text );
 
 				// try removing fancy quotes from para text and match text
 				para_text = para_text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
@@ -388,9 +386,7 @@ jQuery(document).ready( function($) {
 				if ( start === -1 ) {
 
 					// trace
-					if ( console && console.log ) {
-						console.log( 'Could not find un-smartened text:', match_text );
-					}
+					me.debug( 'Could not find un-smartened text:', match_text );
 
 					// try making para text and match text lowercase
 					para_text = para_text.toLowerCase();
@@ -403,10 +399,7 @@ jQuery(document).ready( function($) {
 					if ( start === -1 ) {
 
 						// trace
-						if ( console && console.log ) {
-							console.log( 'Could not find lowercase text:', match_text );
-						}
-
+						me.debug( 'Could not find lowercase text:', match_text );
 
 						// try replacing various words in para text and match text
 						para_text = para_text.replace(/traveling/g, "travelling");
@@ -419,9 +412,7 @@ jQuery(document).ready( function($) {
 						if ( start === -1 ) {
 
 							// trace
-							if ( console && console.log ) {
-								console.log( 'Could not find word-replaced text:', match_text );
-							}
+							me.debug( 'Could not find word-replaced text:', match_text );
 
 							// try removing the last character, which is often punctuation
 							match_text = match_text.substr( 0, match_text.length - 1 );
@@ -433,9 +424,7 @@ jQuery(document).ready( function($) {
 							if ( start === -1 ) {
 
 								// trace
-								if ( console && console.log ) {
-									console.log( 'Could not find shortened text:', match_text );
-								}
+								me.debug( 'Could not find shortened text:', match_text );
 
 								// if all of this fails, bail
 								return;
@@ -592,7 +581,7 @@ jQuery(document).ready( function($) {
 						comment_html += '<div class="comment-content">';
 						comment_html += '&hellip;' + match.snippet.text.replace( /"/g, '&quot;' ) + '&hellip;';
 						comment_html += '</div><!-- /comment-content -->';
-						
+
 						// comment JSTOR link
 						comment_html += '<div class="reply">';
 						comment_html += '<a href="' + page_link + '">' + CommentPress_JSTOR_Settings.localisation.snippet_link + '</a>';
@@ -635,9 +624,8 @@ jQuery(document).ready( function($) {
 				// hide the spinner
 				$('#jstor-loading').remove();
 
-				if ( console && console.log ) {
-					console.log( 'request failed: ' + textStatus );
-				}
+				me.debug( 'request failed', textStatus );
+
 			});
 
 		};
@@ -706,6 +694,19 @@ jQuery(document).ready( function($) {
 			// --<
 			return aggregated;
 
+		};
+
+		/**
+		 * Debugging.
+		 *
+		 * @param {String} message The message to display
+		 * @param {Mixed} variable The variable to display
+		 * @return void
+		 */
+		this.debug = function( message, variable ) {
+			if ( console && console.log ) {
+				//console.log( message, variable );
+			}
 		};
 
 	};
