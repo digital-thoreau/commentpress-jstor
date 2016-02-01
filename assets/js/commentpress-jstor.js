@@ -697,6 +697,20 @@ jQuery(document).ready( function($) {
 		};
 
 		/**
+		 * Escape a string.
+		 *
+		 * @see http://shebang.brandonmintern.com/foolproof-html-escaping-in-javascript/
+		 *
+		 * @param {String} str The string to escape
+		 * @return {String} div.innerHTML The escaped string
+		 */
+		this.escape_string = function( str ) {
+			var div = document.createElement( 'div' );
+			div.appendChild( document.createTextNode( str ) );
+			return div.innerHTML;
+		};
+
+		/**
 		 * Debugging.
 		 *
 		 * @param {String} message The message to display
