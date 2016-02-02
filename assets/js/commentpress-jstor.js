@@ -361,83 +361,17 @@ jQuery(document).ready( function($) {
 			// find this in the paragraph's text sig
 			text_sig = element.parents( '.commentpress_jstor_comments' ).attr( 'data-jstor-textsig' );
 
-			textblock_id = 'textblock-' + text_sig
+			// construct textblock ID
+			textblock_id = 'textblock-' + text_sig;
 
 			// target para
 			para_text = $('#' + textblock_id).text();
 
-			// get start
-			start = para_text.indexOf( match_text );
+			// try and find a match
+			start = me.find_start( para_text, match_text );
 
-			// if we can't find the text
-			if ( start === -1 ) {
-
-				// trace
-				me.debug( 'Could not find text:', match_text );
-
-				// try removing fancy quotes from para text and match text
-				para_text = para_text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
-				match_text = match_text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
-
-				// get start
-				start = para_text.indexOf( match_text );
-
-				// if we can't find the text
-				if ( start === -1 ) {
-
-					// trace
-					me.debug( 'Could not find un-smartened text:', match_text );
-
-					// try making para text and match text lowercase
-					para_text = para_text.toLowerCase();
-					match_text = match_text.toLowerCase();
-
-					// get start
-					start = para_text.indexOf( match_text );
-
-					// if we can't find the text
-					if ( start === -1 ) {
-
-						// trace
-						me.debug( 'Could not find lowercase text:', match_text );
-
-						// try replacing various words in para text and match text
-						para_text = para_text.replace(/traveling/g, "travelling");
-						match_text = match_text.replace(/traveling/g, "travelling");
-
-						// get start
-						start = para_text.indexOf( match_text );
-
-						// if we can't find the text
-						if ( start === -1 ) {
-
-							// trace
-							me.debug( 'Could not find word-replaced text:', match_text );
-
-							// try removing the last character, which is often punctuation
-							match_text = match_text.substr( 0, match_text.length - 1 );
-
-							// get start
-							start = para_text.indexOf( match_text );
-
-							// if we can't find the text
-							if ( start === -1 ) {
-
-								// trace
-								me.debug( 'Could not find shortened text:', match_text );
-
-								// if all of this fails, bail
-								return;
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
+			// bail if we can't find the text
+			if ( start === -1 ) { return; }
 
 			// find end
 			end = start + match_text.length;
@@ -460,6 +394,156 @@ jQuery(document).ready( function($) {
 
 			// clear all highlights
 			CommentPress.texthighlighter.textblocks.highlights_clear_for_comment();
+
+		};
+
+		/**
+		 * Parse text to try and find a match.
+		 *
+		 * @param {String} haystack The source text in which to find the needle
+		 * @param {String} needle The snippet to find in the source text
+		 * @return {Integer} start The start of the match (or -1 on failure)
+		 */
+		this.find_start = function( haystack, needle ) {
+
+			// declare vars
+			var start, tmp, tmp_length,
+			haystack_original = haystack,
+			haystack_length = haystack.length,
+			needle_length = needle.length;
+
+			// get start
+			var start = haystack.indexOf( needle );
+
+			// if we find the text, return start
+			if ( start !== -1 ) { return start; }
+
+			// trace
+			me.debug( 'Could not find text:', needle );
+
+			// remove fancy quotes from para text and match text
+			haystack = haystack.replace( /[\u2018\u2019]/g, "'" ).replace( /[\u201C\u201D]/g, '"' );
+			needle = needle.replace( /[\u2018\u2019]/g, "'" ).replace( /[\u201C\u201D]/g, '"' );
+
+			// get start
+			start = haystack.indexOf( needle );
+
+			// if we find the text, return start
+			if ( start !== -1 ) {
+				me.debug( 'Found un-smartened text:', needle );
+				return start;
+			}
+
+			// trace
+			me.debug( 'Could not find un-smartened text:', needle );
+
+			// try making para text and match text lowercase
+			haystack = haystack.toLowerCase();
+			needle = needle.toLowerCase();
+
+			// get start
+			start = haystack.indexOf( needle );
+
+			// if we find the text, return start
+			if ( start !== -1 ) {
+				me.debug( 'Found lowercase text:', needle );
+				return start;
+			}
+
+			// trace
+			me.debug( 'Could not find lowercase text:', needle );
+
+			// remove the last character, which is often punctuation
+			needle = needle.substr( 0, needle.length - 1 );
+
+			// get start
+			start = haystack.indexOf( needle );
+
+			// if we find the text, return start
+			if ( start !== -1 ) {
+				me.debug( 'Found shortened text:', needle );
+				return start;
+			}
+
+			// trace
+			me.debug( 'Could not find shortened text:', needle );
+
+			// remove all quote marks (already un-smartened) and un-smarten m- and n-dashes
+			haystack = haystack.replace( /[\'\"]/g, '' ).replace( /\u2013|\u2014/g, '-' );
+			needle = needle.replace( /[\'\"]/g, '' ).replace( /\u2013|\u2014/g, '-' );
+
+			// remove all punctuation and concatenate whitespace
+			haystack = haystack.replace( /[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '' ).replace( /\s{2,}/g, ' ' );
+			needle = needle.replace( /[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '' ).replace( /\s{2,}/g, ' ' );
+
+			// get start
+			start = haystack.indexOf( needle );
+
+			// if we find the text, return adjusted start value
+			if ( start !== -1 ) {
+				me.debug( 'Found punctuation-free text:', needle );
+				diff = me.get_diff( haystack_original, start, needle.length );
+				return start + diff;
+			}
+
+			// trace
+			me.debug( 'Could not find punctuation-free text:', needle );
+
+			// replace various words in para text and match text
+			haystack = haystack.replace( /traveling/g, "travelling" );
+			needle = needle.replace( /traveling/g, "travelling" );
+
+			// remove little words (let's start with "i")
+			haystack = haystack.replace( / i /g, ' ' );
+			needle = needle.replace( / i /g, ' ' );
+
+			// get start
+			start = haystack.indexOf( needle );
+
+			// if we find the text, return adjusted start value
+			if ( start !== -1 ) {
+				me.debug( 'Found word-replaced text:', needle );
+				diff = me.get_diff( haystack_original, start, needle.length );
+				return start + diff;
+			}
+
+			// trace
+			me.debug( 'Could not find word-replaced text:', needle );
+
+			// --<
+			return start;
+
+		};
+
+		/**
+		 * Get the rought difference in length between original and parsed string.
+		 *
+		 * We need to find out how many chars have been removed from the needle
+		 * by removing punctuation. This is necessarily going to be an inexact
+		 * figure, but should help a bit.
+		 *
+		 * @param {String} original The original string
+		 * @param {Integer} start The position in the original string
+		 * @param {Integer} leeway The length of the match as leeway
+		 * @return {Array} data The data
+		 */
+		this.get_diff = function( original, start, leeway ) {
+
+			// declare vars
+			var tmp, tmp_length;
+
+			// get preceding text
+			tmp = original.substr( 0, start + leeway );
+
+			// store initial length of preceding text
+			tmp_length = tmp.length;
+
+			// perform the same punctuation removal
+			tmp = tmp.replace( /[\'\"]/g, '' ).replace( /\u2013|\u2014/g, '-' );
+			tmp = tmp.replace( /[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '' ).replace( /\s{2,}/g, ' ' );
+
+			// --<
+			return tmp_length - tmp.length;
 
 		};
 
@@ -719,7 +803,7 @@ jQuery(document).ready( function($) {
 		 */
 		this.debug = function( message, variable ) {
 			if ( console && console.log ) {
-				//console.log( message, variable );
+				console.log( message, variable );
 			}
 		};
 
