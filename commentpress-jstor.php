@@ -34,9 +34,11 @@ if ( ! defined( 'COMMENTPRESS_JSTOR_PATH' ) ) {
 
 
 /**
- * CommentPress JSTOR Class
+ * CommentPress JSTOR Class.
  *
  * A class that encapsulates plugin functionality.
+ *
+ * @since 0.1
  */
 class Commentpress_JSTOR {
 

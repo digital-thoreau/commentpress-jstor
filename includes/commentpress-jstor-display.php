@@ -4,6 +4,8 @@
  * CommentPress JSTOR Display Class
  *
  * A class that encapsulates front-end functionality.
+ *
+ * @since 0.1
  */
 class Commentpress_JSTOR_Display {
 
@@ -140,6 +142,7 @@ class Commentpress_JSTOR_Display {
 			'localisation' => array(
 				'not_found' => __( 'No references were found on JSTOR.', 'commentpress-jstor' ),
 				'snippet_link' => __( 'View on JSTOR', 'commentpress-jstor' ),
+				'triggered_text' => __( 'References found in JSTOR articles', 'commentpress-jstor' ),
 			),
 			'interface' => array(
 				'spinner' => plugins_url( 'assets/images/loading.gif', COMMENTPRESS_JSTOR_FILE ),

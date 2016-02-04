@@ -296,6 +296,11 @@ jQuery(document).ready( function($) {
 				// define vars
 				var element = $(this), text_sig;
 
+				// already triggered?
+				if ( element.hasClass( 'commentpress_jstor_triggered' ) ) {
+					return;
+				}
+
 				// show spinner
 				$(this).after(
 					'<p class="commentpress_jstor_spinner" id="jstor-loading">' +
@@ -611,7 +616,7 @@ jQuery(document).ready( function($) {
 						.slideDown( 'fast', function() {
 							// after slide
 							setTimeout(function () {
-								item.slideUp( ' fast' );
+								item.slideUp( 'fast' );
 							}, 2000 );
 						});
 
@@ -619,6 +624,12 @@ jQuery(document).ready( function($) {
 					return;
 
 				}
+
+				// add class to trigger element
+				element.addClass( 'commentpress_jstor_triggered' );
+
+				// switch out trigger text
+				element.html( CommentPress_JSTOR_Settings.localisation.triggered_text );
 
 				// aggregate
 				docs = me.aggregate_data( data );

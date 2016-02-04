@@ -4,6 +4,8 @@
  * CommentPress JSTOR Admin Class
  *
  * A class that encapsulates admin functionality.
+ *
+ * @since 0.1
  */
 class Commentpress_JSTOR_Admin {
 
