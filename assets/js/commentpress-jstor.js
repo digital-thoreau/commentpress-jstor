@@ -495,8 +495,8 @@ jQuery(document).ready( function($) {
 			me.debug( 'Could not find punctuation-free text:', needle );
 
 			// replace various words in para text and match text
-			haystack = haystack.replace( /traveling/g, "travelling" );
-			needle = needle.replace( /traveling/g, "travelling" );
+			haystack = haystack.replace( /traveling/g, "travelling" ).replace( /&amp;/g, "&" );
+			needle = needle.replace( /traveling/g, "travelling" ).replace( /&amp;/g, "&" );
 
 			// remove little words (let's start with "i")
 			haystack = haystack.replace( / i /g, ' ' );
