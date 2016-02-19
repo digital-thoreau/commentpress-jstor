@@ -9,8 +9,6 @@
  */
 class Commentpress_JSTOR_Display {
 
-
-
 	/**
 	 * Plugin object.
 	 *

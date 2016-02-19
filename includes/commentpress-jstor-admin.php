@@ -9,8 +9,6 @@
  */
 class Commentpress_JSTOR_Admin {
 
-
-
 	/**
 	 * Plugin object.
 	 *
@@ -19,8 +17,6 @@ class Commentpress_JSTOR_Admin {
 	 * @var object $plugin The plugin object
 	 */
 	public $plugin;
-
-
 
 	/**
 	 * Settings data.

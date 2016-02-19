@@ -4,7 +4,7 @@ Plugin Name: CommentPress JSTOR
 Plugin URI: http://www.futureofthebook.org/commentpress/
 Description: Allows CommentPress to access JSTOR Matchmaker tool from The Reader's Thoreau site.
 Author: Institute for the Future of the Book
-Version: 0.1.1
+Version: 0.1.2
 Author URI: http://www.futureofthebook.org
 Text Domain: commentpress-jstor
 Domain Path: /languages
@@ -14,7 +14,7 @@ Domain Path: /languages
 
 
 // set our version here
-define( 'COMMENTPRESS_JSTOR_VERSION', '0.1.1' );
+define( 'COMMENTPRESS_JSTOR_VERSION', '0.1.2' );
 
 // store reference to this file
 if ( ! defined( 'COMMENTPRESS_JSTOR_FILE' ) ) {
@@ -42,8 +42,6 @@ if ( ! defined( 'COMMENTPRESS_JSTOR_PATH' ) ) {
  */
 class Commentpress_JSTOR {
 
-
-
 	/**
 	 * Admin object.
 	 *
@@ -52,8 +50,6 @@ class Commentpress_JSTOR {
 	 * @var object $admin The admin object
 	 */
 	public $admin;
-
-
 
 	/**
 	 * Display object.
