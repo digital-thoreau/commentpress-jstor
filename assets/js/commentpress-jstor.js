@@ -53,6 +53,9 @@ jQuery(document).ready( function($) {
 			// init JSTOR fields
 			me.init_fields();
 
+			// init JSTOR link behaviour
+			me.init_link();
+
 		};
 
 		/**
@@ -226,6 +229,41 @@ jQuery(document).ready( function($) {
 		 */
 		this.get_fields = function() {
 			return me.fields;
+		};
+
+		// default link behaviour
+		me.link = '';
+
+		/**
+		 * Init link from settings object.
+		 *
+		 * By doing this, we can override the default value.
+		 *
+		 * @return void
+		 */
+		this.init_link = function() {
+			if ( 'undefined' !== typeof CommentPress_JSTOR_Settings.jstor.link ) {
+				me.link = CommentPress_JSTOR_Settings.jstor.link;
+			}
+		};
+
+		/**
+		 * Setter for link behaviour.
+		 *
+		 * @param {String} val The link markup
+		 * @return void
+		 */
+		this.set_link = function( val ) {
+			me.link = val;
+		};
+
+		/**
+		 * Getter for link behaviour.
+		 *
+		 * @return {String} The link markup
+		 */
+		this.get_link = function() {
+			return me.link;
 		};
 
 	};
@@ -679,7 +717,7 @@ jQuery(document).ready( function($) {
 
 						// comment JSTOR link
 						comment_html += '<div class="reply">';
-						comment_html += '<a href="' + page_link + '">' + CommentPress_JSTOR_Settings.localisation.snippet_link + '</a>';
+						comment_html += '<a href="' + page_link + '"' + CommentPressJSTOR.settings.get_link() + '>' + CommentPress_JSTOR_Settings.localisation.snippet_link + '</a>';
 						comment_html += '</div>';
 
 					}

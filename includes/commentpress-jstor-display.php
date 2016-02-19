@@ -137,6 +137,12 @@ class Commentpress_JSTOR_Display {
 			COMMENTPRESS_JSTOR_VERSION
 		);
 
+		// get link behaviour
+		$link = '';
+		if ( 'y' == $this->plugin->admin->setting_get( 'link' ) ) {
+			$link = ' target="_blank"';
+		}
+
 		// localisation array
 		$vars = array(
 			'localisation' => array(
@@ -151,6 +157,7 @@ class Commentpress_JSTOR_Display {
 				'work' => $this->plugin->admin->setting_get( 'work' ),
 				'token' => $this->plugin->admin->setting_get( 'token' ),
 				'fields' => $this->plugin->admin->setting_get( 'fields' ),
+				'link' => $link,
 			),
 		);
 

@@ -139,6 +139,13 @@ class Commentpress_JSTOR_Admin {
 			$fields = $existing_fields;
 		}
 
+		// init link
+		$link = 'n';
+		$existing_link = $this->setting_get( 'link' );
+		if ( ! empty( $existing_link ) ) {
+			$link = $existing_link;
+		}
+
 		// append our options
 		$admin_form .= '
 
@@ -152,17 +159,27 @@ class Commentpress_JSTOR_Admin {
 
 			<tr valign="top">
 				<th scope="row"><label for="commentpress_jstor_work">' . __( 'Work code', 'commentpress-jstor' ) . '</label></th>
-				<td><input type="text" id="commentpress_jstor_work" name="commentpress_jstor_work" value="' . $work . '" /></td>
+				<td><input type="text" id="commentpress_jstor_work" name="commentpress_jstor_work" value="' . $work . '" class="regular-text" /></td>
 			</tr>
 
 			<tr valign="top">
 				<th scope="row"><label for="commentpress_jstor_token">' . __( 'Matchmaker API token', 'commentpress-jstor' ) . '</label></th>
-				<td><input type="text" id="commentpress_jstor_token" name="commentpress_jstor_token" value="' . $token . '" /></td>
+				<td><input type="text" id="commentpress_jstor_token" name="commentpress_jstor_token" value="' . $token . '" class="regular-text" /></td>
 			</tr>
 
 			<tr valign="top">
 				<th scope="row"><label for="commentpress_jstor_fields">' . __( 'JSTOR search fields', 'commentpress-jstor' ) . '</label></th>
-				<td><input type="text" id="commentpress_jstor_fields" name="commentpress_jstor_fields" value="' . $fields . '" /></td>
+				<td><input type="text" id="commentpress_jstor_fields" name="commentpress_jstor_fields" value="' . $fields . '" class="regular-text" /></td>
+			</tr>
+
+			<tr valign="top">
+				<th scope="row"><label for="commentpress_jstor_link">' . __( 'JSTOR search link', 'commentpress-jstor' ) . '</label></th>
+				<td>
+					<select id="commentpress_jstor_link" name="commentpress_jstor_link">
+						<option value="n" ' . (($link == 'n') ? ' selected="selected"' : '') . '>' . __( 'Open links in same window', 'commentpress-jstor') . '</option>
+						<option value="y" ' . (($link == 'y') ? ' selected="selected"' : '') . '>' . __( 'Open links in new window', 'commentpress-jstor') . '</option>
+					</select>
+				</td>
 			</tr>
 
 		</table>
@@ -225,6 +242,17 @@ class Commentpress_JSTOR_Admin {
 
 		// save
 		$this->setting_set( 'fields', $fields );
+
+		// default to "open in same window"
+		$link = 'n';
+
+		// sanitise and overwrite if we entered a value
+		if ( isset( $_POST['commentpress_jstor_link'] ) ) {
+			$link = esc_sql( $_POST['commentpress_jstor_link'] );
+		}
+
+		// save
+		$this->setting_set( 'link', $link );
 
 		// save all
 		$this->settings_save();
@@ -303,6 +331,9 @@ class Commentpress_JSTOR_Admin {
 		$settings['fields'] = 'docid,work,work_text,chunk_ids,title,journal,' .
 							  'authors,pages,pubyear,keyterms,similarity,' .
 							  'match_size,snippet,source';
+
+		// set default link behaviour to "open in same window"
+		$settings['link'] = 'n';
 
 		// allow filtering
 		return apply_filters( 'commentpress_jstor_default_settings', $settings );
