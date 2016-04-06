@@ -266,6 +266,9 @@ class Commentpress_JSTOR_Admin {
 	 */
 	public function can_view() {
 
+		// enable!
+		return true;
+
 		// restrict to admins for now
 		if ( is_super_admin() ) return true;
 
