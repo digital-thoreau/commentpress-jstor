@@ -1,37 +1,53 @@
-<?php /*
---------------------------------------------------------------------------------
-Plugin Name: CommentPress JSTOR
-Plugin URI: http://www.futureofthebook.org/commentpress/
-Description: Allows CommentPress to access JSTOR Matchmaker tool from The Reader's Thoreau site.
-Author: Institute for the Future of the Book
-Version: 0.2.0a
-Author URI: http://www.futureofthebook.org
-Text Domain: commentpress-jstor
-Domain Path: /languages
---------------------------------------------------------------------------------
-*/
+<?php
+/**
+ * CommentPress JSTOR
+ *
+ * Plugin Name:       CommentPress JSTOR
+ * Description:       Allows CommentPress to access JSTOR Matchmaker tool from The Reader's Thoreau site.
+ * Plugin URI:        https://github.com/digital-thoreau/commentpress-jstor
+ * GitHub Plugin URI: https://github.com/digital-thoreau/commentpress-jstor
+ * Version:           0.2.0a
+ * Author:            Christian Wach
+ * Author URI:        https://haystack.co.uk
+ * License:           GPLv2 or later
+ * License URI:       https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * Requires at least: 5.7
+ * Requires PHP:      7.4
+ * Text Domain:       commentpress-jstor
+ * Domain Path:       /languages
+ *
+ * @package Commentpress_JSTOR
+ * @link    https://github.com/digital-thoreau/commentpress-jstor
+ * @license GPL v2 or later
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
 
-
-
-// set our version here
+// Set our version here.
 define( 'COMMENTPRESS_JSTOR_VERSION', '0.2.0a' );
 
-// store reference to this file
+// Store reference to this file.
 if ( ! defined( 'COMMENTPRESS_JSTOR_FILE' ) ) {
 	define( 'COMMENTPRESS_JSTOR_FILE', __FILE__ );
 }
 
-// store URL to this plugin's directory
+// Store URL to this plugin's directory.
 if ( ! defined( 'COMMENTPRESS_JSTOR_URL' ) ) {
 	define( 'COMMENTPRESS_JSTOR_URL', plugin_dir_url( COMMENTPRESS_JSTOR_FILE ) );
 }
 
-// store PATH to this plugin's directory
+// Store PATH to this plugin's directory.
 if ( ! defined( 'COMMENTPRESS_JSTOR_PATH' ) ) {
 	define( 'COMMENTPRESS_JSTOR_PATH', plugin_dir_path( COMMENTPRESS_JSTOR_FILE ) );
 }
-
-
 
 /**
  * CommentPress JSTOR Class.
@@ -47,7 +63,7 @@ class Commentpress_JSTOR {
 	 *
 	 * @since 0.1
 	 * @access public
-	 * @var object $admin The admin object
+	 * @var Commentpress_JSTOR_Admin
 	 */
 	public $admin;
 
@@ -56,11 +72,9 @@ class Commentpress_JSTOR {
 	 *
 	 * @since 0.1
 	 * @access public
-	 * @var object $admin The display object
+	 * @var Commentpress_JSTOR_Display
 	 */
 	public $display;
-
-
 
 	/**
 	 * Constructor.
@@ -69,141 +83,105 @@ class Commentpress_JSTOR {
 	 */
 	public function __construct() {
 
-		// include files
+		// Bootstrap plugin.
 		$this->include_files();
-
-		// setup globals
 		$this->setup_globals();
-
-		// register hooks
 		$this->register_hooks();
 
-	}
-
-
-
-	/**
-	 * Perform plugin activation tasks.
-	 *
-	 * @since 0.1
-	 *
-	 * @return void
-	 */
-	public function activate() {
+		/**
+		 * Fires when CommentPress JSTOR has loaded.
+		 *
+		 * @since 0.2.0
+		 */
+		do_action( 'commentpress_jstor/loaded' );
 
 	}
 
-
-
 	/**
-	 * Perform plugin deactivation tasks.
+	 * Includes files.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
-	 */
-	public function deactivate() {
-
-	}
-
-
-
-	/**
-	 * Include files.
-	 *
-	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function include_files() {
 
-		// include admin class
-		include_once COMMENTPRESS_JSTOR_PATH . 'includes/commentpress-jstor-admin.php';
-
-		// include display class
-		include_once COMMENTPRESS_JSTOR_PATH . 'includes/commentpress-jstor-display.php';
+		// Include class files.
+		include_once COMMENTPRESS_JSTOR_PATH . 'includes/class-jstor-admin.php';
+		include_once COMMENTPRESS_JSTOR_PATH . 'includes/class-jstor-display.php';
 
 	}
 
-
-
 	/**
-	 * Set up objects.
+	 * Sets up objects.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function setup_globals() {
 
-		// init admin object
-		$this->admin = new Commentpress_JSTOR_Admin( $this );
-
-		// init display object
+		// Init objects.
+		$this->admin   = new Commentpress_JSTOR_Admin( $this );
 		$this->display = new Commentpress_JSTOR_Display( $this );
 
 	}
 
-
-
 	/**
-	 * Register WordPress hooks.
+	 * Registers WordPress hooks.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function register_hooks() {
 
-		// use translation
-		add_action( 'plugins_loaded', array( $this, 'translation' ) );
-
-		// hooks that always need to be present
-		$this->admin->register_hooks();
-		$this->display->register_hooks();
+		// Use translation.
+		add_action( 'init', [ $this, 'translation' ] );
 
 	}
 
-
-
 	/**
-	 * Load translation if present.
+	 * Loads translation if present.
 	 *
 	 * @since 0.1
-	 *
-	 * @return void
 	 */
 	public function translation() {
 
-		// only use, if we have it...
-		if ( function_exists( 'load_plugin_textdomain' ) ) {
-
-			// there are no translations as yet, but they can now be added
-			load_plugin_textdomain(
-
-				// unique name
-				'commentpress-jstor',
-
-				// deprecated argument
-				false,
-
-				// relative path to directory containing translation files
-				dirname( plugin_basename( COMMENTPRESS_JSTOR_FILE ) ) . '/languages/'
-
-			);
-
-		}
+		// Load translations if present.
+		// phpcs:ignore WordPress.WP.DeprecatedParameters.Load_plugin_textdomainParam2Found
+		load_plugin_textdomain(
+			// Unique name.
+			'commentpress-jstor',
+			// Deprecated argument.
+			'',
+			// Relative path to translation files.
+			dirname( plugin_basename( COMMENTPRESS_JSTOR_FILE ) ) . '/languages/'
+		);
 
 	}
 
+}
 
+/**
+ * Bootstraps plugin if not yet loaded and returns reference.
+ *
+ * @since 0.2.0
+ *
+ * @return Commentpress_JSTOR $plugin The plugin reference.
+ */
+function commentpress_jstor() {
 
-} // class Commentpress_JSTOR ends
+	// Maybe bootstrap plugin.
+	static $plugin;
+	if ( ! isset( $plugin ) ) {
+		$plugin = new Commentpress_JSTOR();
+	}
 
+	// Return reference.
+	return $plugin;
 
+}
 
-// instantiate the class
-global $commentpress_jstor;
-$commentpress_jstor = new Commentpress_JSTOR();
+// Bootstrap immediately.
+commentpress_jstor();
 
-
+/*
+ * Uninstall uses the 'uninstall.php' method.
+ *
+ * @see https://developer.wordpress.org/reference/functions/register_uninstall_hook/
+ */

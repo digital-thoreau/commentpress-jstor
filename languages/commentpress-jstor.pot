@@ -1,88 +1,88 @@
-# Copyright (C) 2016 CommentPress JSTOR
-# This file is distributed under the same license as the CommentPress JSTOR package.
+# Copyright (C) 2024 Christian Wach
+# This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: CommentPress JSTOR 0.1.2\n"
+"Project-Id-Version: CommentPress JSTOR 0.2.0a\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/commentpress-jstor\n"
-"POT-Creation-Date: 2016-02-19 19:47:29+00:00\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2024-10-18T18:29:15+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: commentpress-jstor\n"
 
-#: includes/commentpress-jstor-admin.php:150
-msgid "JSTOR Matchmaker Options"
-msgstr ""
-
-#: includes/commentpress-jstor-admin.php:152
-msgid "Add your JSTOR settings here."
-msgstr ""
-
-#: includes/commentpress-jstor-admin.php:157
-msgid "Work code"
-msgstr ""
-
-#: includes/commentpress-jstor-admin.php:162
-msgid "Matchmaker API token"
-msgstr ""
-
-#: includes/commentpress-jstor-admin.php:167
-msgid "JSTOR search fields"
-msgstr ""
-
-#: includes/commentpress-jstor-admin.php:172
-msgid "JSTOR search link"
-msgstr ""
-
-#: includes/commentpress-jstor-admin.php:175
-msgid "Open links in same window"
-msgstr ""
-
-#: includes/commentpress-jstor-admin.php:176
-msgid "Open links in new window"
-msgstr ""
-
-#: includes/commentpress-jstor-admin.php:370
-msgid "You must supply a setting to setting_get()"
-msgstr ""
-
-#: includes/commentpress-jstor-admin.php:393
-msgid "You must supply a setting to setting_set()"
-msgstr ""
-
-#: includes/commentpress-jstor-display.php:147
-msgid "No references were found on JSTOR."
-msgstr ""
-
-#: includes/commentpress-jstor-display.php:148
-msgid "View on JSTOR"
-msgstr ""
-
-#: includes/commentpress-jstor-display.php:149
-msgid "References found in JSTOR articles"
-msgstr ""
-
-#: includes/commentpress-jstor-display.php:195
-msgid "Find references in JSTOR articles"
-msgstr ""
-#. Plugin Name of the plugin/theme
+#. Plugin Name of the plugin
+#: commentpress-jstor.php
 msgid "CommentPress JSTOR"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
-msgid "http://www.futureofthebook.org/commentpress/"
+#. Plugin URI of the plugin
+#: commentpress-jstor.php
+msgid "https://github.com/digital-thoreau/commentpress-jstor"
 msgstr ""
 
-#. Description of the plugin/theme
+#. Description of the plugin
+#: commentpress-jstor.php
 msgid "Allows CommentPress to access JSTOR Matchmaker tool from The Reader's Thoreau site."
 msgstr ""
 
-#. Author of the plugin/theme
-msgid "Institute for the Future of the Book"
+#. Author of the plugin
+#: commentpress-jstor.php
+msgid "Christian Wach"
 msgstr ""
 
-#. Author URI of the plugin/theme
-msgid "http://www.futureofthebook.org"
+#. Author URI of the plugin
+#: commentpress-jstor.php
+msgid "https://haystack.co.uk"
+msgstr ""
+
+#: assets/templates/metaboxes/metabox-settings-site-jstor.php:15
+msgid "Add the JSTOR Matchmaker settings here."
+msgstr ""
+
+#: assets/templates/metaboxes/metabox-settings-site-jstor.php:32
+msgid "Work code"
+msgstr ""
+
+#: assets/templates/metaboxes/metabox-settings-site-jstor.php:41
+msgid "Matchmaker API token"
+msgstr ""
+
+#: assets/templates/metaboxes/metabox-settings-site-jstor.php:50
+msgid "JSTOR search fields"
+msgstr ""
+
+#: assets/templates/metaboxes/metabox-settings-site-jstor.php:59
+msgid "JSTOR search link"
+msgstr ""
+
+#: assets/templates/metaboxes/metabox-settings-site-jstor.php:63
+msgid "Open links in same window"
+msgstr ""
+
+#: assets/templates/metaboxes/metabox-settings-site-jstor.php:64
+msgid "Open links in new window"
+msgstr ""
+
+#: includes/class-jstor-admin.php:199
+msgid "JSTOR Matchmaker Settings"
+msgstr ""
+
+#: includes/class-jstor-display.php:151
+msgid "No references were found on JSTOR."
+msgstr ""
+
+#: includes/class-jstor-display.php:152
+msgid "View on JSTOR"
+msgstr ""
+
+#: includes/class-jstor-display.php:153
+msgid "References found in JSTOR articles"
+msgstr ""
+
+#: includes/class-jstor-display.php:202
+msgid "Find references in JSTOR articles"
 msgstr ""
